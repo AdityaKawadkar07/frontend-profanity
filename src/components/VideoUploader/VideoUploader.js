@@ -1,35 +1,42 @@
-import React, { useState } from 'react';
-import VideoPreview from '../VideoPreview/VideoPreview';
+import React, { useState } from "react";
 
-const VideoUploader = () => {
-  const [videoFile, setVideoFile] = useState(null);
+const VideoUploader = ({ onVideoUpload }) => {
+  const [mode, setMode] = useState("trim"); // Modes: "trim" or "mute"
+  const [videoURL, setVideoURL] = useState(null); // For storing the uploaded video URL
 
-  const handleUpload = (event) => {
+  const toggleMode = () => {
+    setMode(mode === "trim" ? "mute" : "trim");
+  };
+
+  const handleFileChange = (event) => {
     const file = event.target.files[0];
-    if (file && file.type.startsWith('video/')) {
-      setVideoFile(URL.createObjectURL(file));
-    } else {
-      alert('Please upload a valid video file.');
+    if (file) {
+      const videoURL = URL.createObjectURL(file);
+      setVideoURL(videoURL); // Set the uploaded video URL
+      onVideoUpload(videoURL); // Pass the video URL to the parent component
     }
   };
 
   return (
-    <div className="flex flex-col items-center">
-      
-      {videoFile ? (
-        <VideoPreview videoSrc={videoFile} />
-      ) : (
-        <div className="w-full h-56 bg-gray-200 rounded shadow flex items-center justify-center">
-          <p className="text-base-content">No video selected</p>
-        </div>
-      )}
-    <h2 className="text-lg font-bold mb-4">Upload Original Video</h2>
-      <input
-        type="file"
-        accept="video/*"
-        className="mb-4 btn btn-accent"
-        onChange={handleUpload}
-      />
+    <div className="flex flex-col items-center space-y-4">
+      {/* Video Upload Section */}
+      <label className="btn btn-accent cursor-pointer">
+        Upload Video
+        <input
+          type="file"
+          accept="video/*"
+          className="hidden"
+          onChange={handleFileChange}
+        />
+      </label>
+
+      {/* Toggle Mode Button */}
+      <button
+        className={`btn ${mode === "trim" ? "btn-success" : "btn-warning"}`}
+        onClick={toggleMode}
+      >
+        {mode === "trim" ? "Set to Trim Content" : "Set to Mute Content"}
+      </button>
     </div>
   );
 };

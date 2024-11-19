@@ -1,17 +1,15 @@
-import React from 'react';
+import React from "react";
 
-const VideoPreview = ({ videoSrc }) => {
+const VideoPreview = ({ videoURL }) => {
   return (
-    <div className="w-full h-56 rounded shadow overflow-hidden bg-gray-800">
-      {videoSrc ? (
-        <video
-          src={videoSrc}
-          controls
-          className="w-full h-full object-cover"
-        />
-      ) : (
-        <p className="text-center text-base-content py-4">No video to preview</p>
-      )}
+    <div className="flex justify-center">
+      <video
+        className="rounded-lg shadow-lg w-96 h-64 lg:w-[500px] lg:h-[300px]"
+        controls
+        src={videoURL || ""}
+      >
+        Your browser does not support the video tag.
+      </video>
     </div>
   );
 };
